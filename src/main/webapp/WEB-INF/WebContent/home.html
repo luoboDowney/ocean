@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>首页界面</title>
+  <script src="lib/Cesium/Cesium.js"></script>
+  <link href="lib/Cesium/Widgets/widgets.css" rel="stylesheet">
+  <!--    <script src="lib/echarts/echarts-gl.v1.min.js"></script>-->
+  <script src="lib/echarts/echarts.v4.min.js"></script>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/build.css">
+  <link rel="stylesheet" href="css/leftNav.css">
+  <link rel="stylesheet" href="css/colorBar.css">
+  <link rel="stylesheet" href="lib/jquery/jquery-editable-select.min.css">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <style type="text/css">
+    body {
+      background-color: #081832;
+      overflow: hidden;
+    }
+  </style>
+  <script src="lib/js/toast.js"></script>
+  <script src="lib/jquery/jquery-3.5.1.min.js"></script>
+  <script src="lib/js/checkLogin.js"></script>
+</head>
+<body>
+<!--顶部-->
+<header class="header left">
+  <div class="left nav">
+    <ul>
+      <li class="nav_active"><i class="nav_1"></i><a href="OA1.html">可视化</a></li>
+      <li><i class="nav_2"></i><a href="#" id="btn_one">重构仿真</a></li>
+      <li><i class="nav_3"></i><a href="#" id="btn_two">声传播仿真</a></li>
+    </ul>
+  </div>
+  <div class="header_center left" style="cursor: pointer" ondblclick="clearUserInfo();location.reload()">
+    <h2><strong>三维海洋动力统计重构示范系统</strong></h2>
+    <p class="color_font"><small>Three-dimensional ocean dynamic statistical reconstruction demonstration system</small></p>
+  </div>
+  <div class="right nav text_right">
+    <ul>
+      <li><i class="nav_7"></i><a href="#" id="btn_three">应用仿真</a></li>
+      <li><i class="nav_8"></i><a href="#" id="btn_four">用户管理</a></li>
+      <li><i class="nav_4"></i><a href="#" id="btn_five">数据库管理</a></li>
+    </ul>
+  </div>
+</header>
+<!--内容部分-->
+<div class="con left">
+  <div class="div_any">
+    <!--            可视化-->
+    <div id="vision">
+      <div class="div_any02 left ">
+        <div class="div_any_child div_height">
+          <!--                    可视化！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！地球范围选择-->
+          <div id="btnMap1" class="div_any_title any_title_width">
+            <div>&#xe608;</div>
+            全球范围
+          </div>
+          <div id="btnMap2" class="div_any_title any_title_width1">
+            <div>&#xe608;</div>
+            北印度洋
+          </div>
+          <div id="btnMap3" class="div_any_title any_title_width2">
+            <div>&#xe608;</div>
+            西北太
+          </div>
+          <!--                    可视化 ！！！！！！！！！！！！！！！！！！！！！！！！侧边栏弹出栏-->
+          <div class="leftNav" id="sidebar" style="width: 300px;">
+            <!--                        侧边弹出栏 查询-->
+            <div class="left-nav-part">
+              <div class="leftFactor">查询</div>
+              <div id="closeNav" class="sidebarOff">X</div>
+              <div class="content">
+                <label>
+                  <p>数据来源:</p>
+                  <select id="firstDir">
+                    <option>重构模型</option>
+                    <option>模式数据</option>
+                    <option>实测数据</option>
+                    <option>声场数据</option>
+                    <option>遥感数据</option>
+                    <option>其他数据</option>
+                    <option>动态数据</option>
+                  </select>
+                </label>
+                <label>
+                  <p>数据类别:</p>
+                  <select id="secondDir">
+                    <option>Adjust_insitability</option>
+                    <option>evaluate</option>
+                    <option>ISOP_NIO</option>
+                    <option>MODAS_NIO</option>
+                    <option>SQG_isQG_rec</option>
+                  </select>
+                </label>
+                <label>
+                  <p>结果类别:</p>
+                  <select id="thirdDir">
+                    <option>input</option>
+                    <option>output</option>
+                  </select>
+                </label>
+                <div class="left-nav-button" id="leftNavButtonSearch">确定</div>
+              </div>
+              <div id="echartsShow" class="eShow">&#xe6c1;</div>
+            </div>
+            <!--                        侧边弹出栏 文件列表-->
+            <div class="left-nav-part">
+              <div class="leftFactor">文件列表</div>
+              <div class="content">
+                <ul id="leftNavFileList"></ul>
+              </div>
+            </div>
+            <!--                        侧边弹出栏 制图参数-->
+            <div class="left-nav-part">
+              <div class="leftFactor">制图参数</div>
+              <div class="content">
+                <label class="label-param-top">
+                  <p>参数:</p>
+                  <select id="selectParam">
+                    <option value="温度">温度</option>
+                    <option value="盐度">盐度</option>
+                    <option value="密度">密度</option>
+                    <option value="声速">声速</option>
+                    <option value="流场">流场</option>
+                    <option value="海面高度">海面高度</option>
+                    <option value="涡">涡</option>
+                  </select>
+                </label>
+                <label class="label-param-top">
+                  <p>区域:</p>
+                  <select id="selectArea">
+                    <option value="西北太">西北太</option>
+                    <option value="北印度洋">北印度洋</option>
+                  </select>
+                </label>
+                <label class="label-param-bottom">
+                  <p>层级:</p>
+                  <select id="selectLayer">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                    <option value="32">32</option>
+                    <option value="33">33</option>
+                    <option value="34">34</option>
+                    <option value="35">35</option>
+                    <option value="63">63</option>
+                    <option value="37">37</option>
+                    <option value="83">83</option>
+                    <option value="39">39</option>
+                    <option value="40">40</option>
+                    <option value="41">41</option>
+                    <option value="42">42</option>
+                    <option value="43">43</option>
+                    <option value="44">44</option>
+                    <option value="45">45</option>
+                    <option value="46">46</option>
+                    <option value="47">47</option>
+                    <option value="48">48</option>
+                    <option value="49">49</option>
+                    <option value="50">50</option>
+                    <option value="51">51</option>
+                    <option value="52">52</option>
+                    <option value="53">53</option>
+                    <option value="54">54</option>
+                    <option value="55">55</option>
+                  </select>
+                </label>
+                <label class="label-param-bottom">
+                  <p>角度:</p>
+                  <select id="selectAngle">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                    <option value="32">32</option>
+                    <option value="33">33</option>
+                    <option value="34">34</option>
+                    <option value="35">35</option>
+                    <option value="36">36</option>
+                    <option value="37">37</option>
+                    <option value="38">38</option>
+                    <option value="39">39</option>
+                    <option value="40">40</option>
+                    <option value="41">41</option>
+                    <option value="42">42</option>
+                    <option value="43">43</option>
+                    <option value="44">44</option>
+                    <option value="45">45</option>
+                    <option value="46">46</option>
+                    <option value="47">47</option>
+                    <option value="48">48</option>
+                    <option value="49">49</option>
+                    <option value="50">50</option>
+                    <option value="51">51</option>
+                    <option value="52">52</option>
+                    <option value="53">53</option>
+                    <option value="54">54</option>
+                    <option value="55">55</option>
+                    <option value="56">56</option>
+                    <option value="57">57</option>
+                    <option value="58">58</option>
+                    <option value="59">59</option>
+                    <option value="60">60</option>
+                    <option value="61">61</option>
+                    <option value="62">62</option>
+                    <option value="63">63</option>
+                    <option value="64">64</option>
+                    <option value="65">65</option>
+                    <option value="66">66</option>
+                    <option value="67">67</option>
+                    <option value="68">68</option>
+                    <option value="69">69</option>
+                    <option value="70">70</option>
+                    <option value="71">71</option>
+                    <option value="72">72</option>
+                    <option value="73">73</option>
+                    <option value="74">74</option>
+                    <option value="75">75</option>
+                    <option value="76">76</option>
+                    <option value="77">77</option>
+                    <option value="78">78</option>
+                    <option value="79">79</option>
+                    <option value="80">80</option>
+                    <option value="81">81</option>
+                    <option value="82">82</option>
+                    <option value="83">83</option>
+                    <option value="84">84</option>
+                    <option value="85">85</option>
+                    <option value="86">86</option>
+                    <option value="87">87</option>
+                    <option value="88">88</option>
+                    <option value="89">89</option>
+                    <option value="90">90</option>
+                    <option value="91">91</option>
+                    <option value="92">92</option>
+                    <option value="93">93</option>
+                    <option value="94">94</option>
+                    <option value="95">95</option>
+                    <option value="96">96</option>
+                    <option value="97">97</option>
+                    <option value="98">98</option>
+                    <option value="99">99</option>
+                    <option value="100">100</option>
+                    <option value="101">101</option>
+                    <option value="102">102</option>
+                    <option value="103">103</option>
+                    <option value="104">104</option>
+                    <option value="105">105</option>
+                    <option value="106">106</option>
+                    <option value="107">107</option>
+                    <option value="108">108</option>
+                    <option value="109">109</option>
+                    <option value="110">110</option>
+                    <option value="111">111</option>
+                    <option value="112">112</option>
+                    <option value="113">113</option>
+                    <option value="114">114</option>
+                    <option value="115">115</option>
+                    <option value="116">116</option>
+                    <option value="117">117</option>
+                    <option value="118">118</option>
+                    <option value="119">119</option>
+                    <option value="120">120</option>
+                    <option value="121">121</option>
+                    <option value="122">122</option>
+                    <option value="123">123</option>
+                    <option value="124">124</option>
+                    <option value="125">125</option>
+                    <option value="126">126</option>
+                    <option value="127">127</option>
+                    <option value="128">128</option>
+                    <option value="129">129</option>
+                    <option value="130">130</option>
+                    <option value="131">131</option>
+                    <option value="132">132</option>
+                    <option value="133">133</option>
+                    <option value="134">134</option>
+                    <option value="135">135</option>
+                    <option value="136">136</option>
+                    <option value="137">137</option>
+                    <option value="138">138</option>
+                    <option value="139">139</option>
+                    <option value="140">140</option>
+                    <option value="141">141</option>
+                    <option value="142">142</option>
+                    <option value="143">143</option>
+                    <option value="144">144</option>
+                    <option value="145">145</option>
+                    <option value="146">146</option>
+                    <option value="147">147</option>
+                    <option value="148">148</option>
+                    <option value="149">149</option>
+                    <option value="150">150</option>
+                    <option value="151">151</option>
+                    <option value="152">152</option>
+                    <option value="153">153</option>
+                    <option value="154">154</option>
+                    <option value="155">155</option>
+                    <option value="156">156</option>
+                    <option value="157">157</option>
+                    <option value="158">158</option>
+                    <option value="159">159</option>
+                    <option value="160">160</option>
+                    <option value="161">161</option>
+                    <option value="162">162</option>
+                    <option value="163">163</option>
+                    <option value="164">164</option>
+                    <option value="165">165</option>
+                    <option value="166">166</option>
+                    <option value="167">167</option>
+                    <option value="168">168</option>
+                    <option value="169">169</option>
+                    <option value="170">170</option>
+                    <option value="171">171</option>
+                    <option value="172">172</option>
+                    <option value="173">173</option>
+                    <option value="174">174</option>
+                    <option value="175">175</option>
+                    <option value="176">176</option>
+                    <option value="177">177</option>
+                    <option value="178">178</option>
+                    <option value="179">179</option>
+                    <option value="180">180</option>
+                    <option value="181">181</option>
+                    <option value="182">182</option>
+                    <option value="183">183</option>
+                    <option value="184">184</option>
+                    <option value="185">185</option>
+                    <option value="186">186</option>
+                    <option value="187">187</option>
+                    <option value="188">188</option>
+                    <option value="189">189</option>
+                    <option value="190">190</option>
+                    <option value="191">191</option>
+                    <option value="192">192</option>
+                    <option value="193">193</option>
+                    <option value="194">194</option>
+                    <option value="195">195</option>
+                    <option value="196">196</option>
+                    <option value="197">197</option>
+                    <option value="198">198</option>
+                    <option value="199">199</option>
+                    <option value="200">200</option>
+                    <option value="201">201</option>
+                    <option value="202">202</option>
+                    <option value="203">203</option>
+                    <option value="204">204</option>
+                    <option value="205">205</option>
+                    <option value="206">206</option>
+                    <option value="207">207</option>
+                    <option value="208">208</option>
+                    <option value="209">209</option>
+                    <option value="210">210</option>
+                    <option value="211">211</option>
+                    <option value="212">212</option>
+                    <option value="213">213</option>
+                    <option value="214">214</option>
+                    <option value="215">215</option>
+                    <option value="216">216</option>
+                    <option value="217">217</option>
+                    <option value="218">218</option>
+                    <option value="219">219</option>
+                    <option value="220">220</option>
+                    <option value="221">221</option>
+                    <option value="222">222</option>
+                    <option value="223">223</option>
+                    <option value="224">224</option>
+                    <option value="225">225</option>
+                    <option value="226">226</option>
+                    <option value="227">227</option>
+                    <option value="228">228</option>
+                    <option value="229">229</option>
+                    <option value="230">230</option>
+                    <option value="231">231</option>
+                    <option value="232">232</option>
+                    <option value="233">233</option>
+                    <option value="234">234</option>
+                    <option value="235">235</option>
+                    <option value="236">236</option>
+                    <option value="237">237</option>
+                    <option value="238">238</option>
+                    <option value="239">239</option>
+                    <option value="240">240</option>
+                    <option value="241">241</option>
+                    <option value="242">242</option>
+                    <option value="243">243</option>
+                    <option value="244">244</option>
+                    <option value="245">245</option>
+                    <option value="246">246</option>
+                    <option value="247">247</option>
+                    <option value="248">248</option>
+                    <option value="249">249</option>
+                    <option value="250">250</option>
+                    <option value="251">251</option>
+                    <option value="252">252</option>
+                    <option value="253">253</option>
+                    <option value="254">254</option>
+                    <option value="255">255</option>
+                    <option value="256">256</option>
+                    <option value="257">257</option>
+                    <option value="258">258</option>
+                    <option value="259">259</option>
+                    <option value="260">260</option>
+                    <option value="261">261</option>
+                    <option value="262">262</option>
+                    <option value="263">263</option>
+                    <option value="264">264</option>
+                    <option value="265">265</option>
+                    <option value="266">266</option>
+                    <option value="267">267</option>
+                    <option value="268">268</option>
+                    <option value="269">269</option>
+                    <option value="270">270</option>
+                    <option value="271">271</option>
+                    <option value="272">272</option>
+                    <option value="273">273</option>
+                    <option value="274">274</option>
+                    <option value="275">275</option>
+                    <option value="276">276</option>
+                    <option value="277">277</option>
+                    <option value="278">278</option>
+                    <option value="279">279</option>
+                    <option value="280">280</option>
+                    <option value="281">281</option>
+                    <option value="282">282</option>
+                    <option value="283">283</option>
+                    <option value="284">284</option>
+                    <option value="285">285</option>
+                    <option value="286">286</option>
+                    <option value="287">287</option>
+                    <option value="288">288</option>
+                    <option value="289">289</option>
+                    <option value="290">290</option>
+                    <option value="291">291</option>
+                    <option value="292">292</option>
+                    <option value="293">293</option>
+                    <option value="294">294</option>
+                    <option value="295">295</option>
+                    <option value="296">296</option>
+                    <option value="297">297</option>
+                    <option value="298">298</option>
+                    <option value="299">299</option>
+                    <option value="300">300</option>
+                    <option value="301">301</option>
+                    <option value="302">302</option>
+                    <option value="303">303</option>
+                    <option value="304">304</option>
+                    <option value="305">305</option>
+                    <option value="306">306</option>
+                    <option value="307">307</option>
+                    <option value="308">308</option>
+                    <option value="309">309</option>
+                    <option value="310">310</option>
+                    <option value="311">311</option>
+                    <option value="312">312</option>
+                    <option value="313">313</option>
+                    <option value="314">314</option>
+                    <option value="315">315</option>
+                    <option value="316">316</option>
+                    <option value="317">317</option>
+                    <option value="318">318</option>
+                    <option value="319">319</option>
+                    <option value="320">320</option>
+                    <option value="321">321</option>
+                    <option value="322">322</option>
+                    <option value="323">323</option>
+                    <option value="324">324</option>
+                    <option value="325">325</option>
+                    <option value="326">326</option>
+                    <option value="327">327</option>
+                    <option value="328">328</option>
+                    <option value="329">329</option>
+                    <option value="330">330</option>
+                    <option value="331">331</option>
+                    <option value="332">332</option>
+                    <option value="333">333</option>
+                    <option value="334">334</option>
+                    <option value="335">335</option>
+                    <option value="336">336</option>
+                    <option value="337">337</option>
+                    <option value="338">338</option>
+                    <option value="339">339</option>
+                    <option value="340">340</option>
+                    <option value="341">341</option>
+                    <option value="342">342</option>
+                    <option value="343">343</option>
+                    <option value="344">344</option>
+                    <option value="345">345</option>
+                    <option value="346">346</option>
+                    <option value="347">347</option>
+                    <option value="348">348</option>
+                    <option value="349">349</option>
+                    <option value="350">350</option>
+                    <option value="351">351</option>
+                    <option value="352">352</option>
+                    <option value="353">353</option>
+                    <option value="354">354</option>
+                    <option value="355">355</option>
+                    <option value="356">356</option>
+                    <option value="357">357</option>
+                    <option value="358">358</option>
+                    <option value="359">359</option>
+                    <option value="360">360</option>
+                  </select>
+                </label>
+                <label class="label-param-bottom">
+                  <p>精度:</p>
+                  <select id="selectPrecision">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                  </select>
+                </label>
+                <div id="colorBarContainerEcharts" class="picColor" style="display: none">
+                  <input style="width: 72%" id="colorMin" type="range" min="0" max="110" step="1" value="80" onchange="minValue.value=this.value;colorBarLeft.style.width=this.value/1.1+'%'">
+                  <input style="width: 72%" id="colorMax" type="range" min="0" max="110" step="1" value="110" onchange="maxValue.value=this.value;colorBarRight.style.width=(110-this.value)/1.1+'%'">
+                  <input value="80" id="minValue" onchange="colorMin.value=this.value"/>
+                  <div style="width: 72%" class="moveColorContainer">
+                    <div id="colorBarLeft" style="background-color: #313695; width: calc(80% / 1.1)"></div>
+                    <div class="moveColor"></div>
+                    <div id="colorBarRight" style="background-color: #a50026"></div>
+                  </div>
+                  <input value="100" id="maxValue" onchange="colorMax.value=this.value"/>
+                  <div class="left-nav-button" id="leftNavButtonParam" style="font-size: smaller; top: 2px; right: -80px">确定</div>
+                </div>
+                <div id="colorBarContainerCesium" class="picColor" style="width: 100%;">
+                  <!-- 以下两个 input 必须存在，因为使用了已定义的样式 -->
+                  <input type="text" style="display: none">
+                  <input type="text" style="display: none">
+                  <input value="0" id="contourColorMin"/>
+                  <div style="width: 72%" class="moveColorContainer moveColor"></div>
+                  <input value="30" id="contourColorMax" style="left: 233px;"/>
+                </div>
+                <div class="left-nav-button" id="leftNavButtonAdd" style="font-size: large;">+</div>
+                <div class="left-nav-button" id="leftNavButtonClear" style="right: 80px;">清理</div>
+              </div>
+            </div>
+          </div>
+          <div class="sidebarShow" id="popDown">&#62;</div>
+          <div id="cesiumContainer" style="position: relative">
+            <div id="cesiumEcharts" style="display:none;position: absolute;z-index: 9;width: 380px;height: 100%;bottom: 0;right: 0;background-color: #ffffff">
+            </div>
+          </div>
+          <div id="cesiumEchartsExit" style="display: none; position: absolute;z-index: 99;top: 0;right: 326px;cursor: pointer">X</div>
+          <div id="main" class="ePop show1 middle">
+            <div style="display: block">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道1:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000;" id="pic1"></div>
+              <div id="heat1"></div>
+              <div id="line1"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道2:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic2"></div>
+              <div id="heat2"></div>
+              <div id="line2"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道3:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic3"></div>
+              <div style="background-color: #000" id="heat3"></div>
+              <div id="line3"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道4:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic4"></div>
+              <div style="background-color: #000" id="heat4"></div>
+              <div id="line4"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道5:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic5"></div>
+              <div style="background-color: #000" id="heat5"></div>
+              <div id="line5"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道6:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic6"></div>
+              <div style="background-color: #000" id="heat6"></div>
+              <div id="line6"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道7:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic7"></div>
+              <div style="background-color: #000" id="heat7"></div>
+              <div id="line7"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道8:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic8"></div>
+              <div style="background-color: #000" id="heat8"></div>
+              <div id="line8"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道9:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic9"></div>
+              <div style="background-color: #000" id="heat9"></div>
+              <div id="line9"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道10:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic10"></div>
+              <div style="background-color: #000" id="heat10"></div>
+              <div id="line10"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道11:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic11"></div>
+              <div style="background-color: #000" id="heat11"></div>
+              <div id="line11"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道12:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic12"></div>
+              <div style="background-color: #000" id="heat12"></div>
+              <div id="line12"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道13:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic13"></div>
+              <div style="background-color: #000" id="heat13"></div>
+              <div id="line13"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道14:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic14"></div>
+              <div style="background-color: #000" id="heat14"></div>
+              <div id="line14"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道15:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic15"></div>
+              <div style="background-color: #000" id="heat15"></div>
+              <div id="line15"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道16:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic16"></div>
+              <div style="background-color: #000" id="heat16"></div>
+              <div id="line16"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道17:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic17"></div>
+              <div style="background-color: #000" id="heat17"></div>
+              <div id="line17"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道18:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic18"></div>
+              <div style="background-color: #000" id="heat18"></div>
+              <div id="line18"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道19:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic19"></div>
+              <div style="background-color: #000" id="heat19"></div>
+              <div id="line19"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道20:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic20"></div>
+              <div style="background-color: #000" id="heat20"></div>
+              <div id="line20"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道21:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic21"></div>
+              <div style="background-color: #000" id="heat21"></div>
+              <div id="line21"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道22:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic22"></div>
+              <div style="background-color: #000" id="heat22"></div>
+              <div id="line22"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道23:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic23"></div>
+              <div style="background-color: #000" id="heat23"></div>
+              <div id="line23"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道24:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic24"></div>
+              <div style="background-color: #000" id="heat24"></div>
+              <div id="line24"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道25:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic25"></div>
+              <div style="background-color: #000" id="heat25"></div>
+              <div id="line25"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道26:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic26"></div>
+              <div style="background-color: #000" id="heat26"></div>
+              <div id="line26"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道27:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic27"></div>
+              <div style="background-color: #000" id="heat27"></div>
+              <div id="line27"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道28:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic28"></div>
+              <div style="background-color: #000" id="heat28"></div>
+              <div id="line28"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道29:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic29"></div>
+              <div style="background-color: #000" id="heat29"></div>
+              <div id="line29"></div>
+            </div>
+            <div style="display: none">
+              <div class="mapTitleContainer">
+                <div></div>
+                <span>通道30:</span>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div style="width: 50px">选择</div>
+              </div>
+              <div style="background-color: #000" id="pic30"></div>
+              <div style="background-color: #000" id="heat30"></div>
+              <div id="line30"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--            三维重构-->
+    <div id="chonggou" style="display: none">
+      <div class="left" style="width: 50%">
+        <div class="div_any_child div_height testOne setColor" style="border-radius: 10px 0 0 10px">
+          <div class="chonggou_set">
+            <p>参数设置</p>
+            <div class="chonggou_title">
+              <p style="">重构方案</p>
+              <label class="chonggou_set1" style="margin-left: 80px;">
+                <input type="radio" value="4" name="singleSelect">
+                <span>统计重构</span>
+              </label>
+              <label class="chonggou_set1">
+                <input type="radio" value="3" name="singleSelect">
+                <span>垂直梯度</span>
+              </label>
+              <label class="chonggou_set1">
+                <input type="radio" value="2" name="singleSelect">
+                <span>静力稳定</span>
+              </label>
+              <label class="chonggou_set1">
+                <input type="radio" value="5" name="singleSelect">
+                <span>地转平衡</span>
+              </label>
+              <label class="chonggou_set1">
+                <input type="radio" value="1" name="singleSelect" checked>
+                <span>模型评估</span>
+              </label>
+              <p style="margin-top: 78px">模式产品</p>
+              <label class="chonggou_set1" style="margin-left: 80px;">
+                <input type="radio" value="4" name="singleSelect">
+                <span>风场实验</span>
+              </label>
+              <label class="chonggou_set1">
+                <input type="radio" value="5" name="singleSelect">
+                <span>地形实验1</span>
+              </label>
+              <label class="chonggou_set1">
+                <input type="radio" value="6" name="singleSelect">
+                <span>地形实验2</span>
+              </label>
+              <label class="chonggou_set1" style="width: 130px">
+                <input type="radio" value="7" name="singleSelect">
+                <span>全耦合实验</span>
+              </label>
+              <p style="margin-top: 78px">区域设置</p>
+              <div class="chonggou_part">
+                <span>起始经度</span>
+                <input type="text" id="input_minLon" value="39">
+              </div>
+              <div class="chonggou_part">
+                <span>起始纬度</span>
+                <input type="text" id="input_minLat" value="0">
+              </div>
+              <div class="chonggou_part" style="margin-top: 6px">
+                <span style="">终止经度</span>
+                <input type="text" id="input_maxLon" value="106">
+              </div>
+              <div class="chonggou_part" style="margin-top: 6px">
+                <span style="">终止纬度</span>
+                <input type="text" id="input_maxLat" value="30">
+              </div>
+              <p style="margin-top: 120px">时间设置</p>
+              <div class="chonggou_time">
+                <span>开始时间</span>
+                <input type="text" id="input_time">
+              </div>
+            </div>
+            <div id="startExe" class="runBtn">运行</div>
+          </div>
+        </div>
+      </div>
+      <div class="left chonggou_right" style="width: 50%">
+        <div id="chonggouMessages" class="div_any_child div_height testOne setColor"
+             style="border-radius: 0 10px 10px 0">
+          <div class="">
+            <p style="border-radius: 0 10px 0 0">状态信息</p>
+            <div id="chonggouStatusMessages"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--            应用仿真-->
+    <div id="fangzhen" style="display: none">
+      <div class="left" style="width: 50%">
+        <div class="div_any_child div_height testOne setColor fangzhen_set"
+             style="border-radius: 10px 0 0 10px">
+          <p>参数设置</p>
+          <div>
+            <div>H<sub>min</sub></div>
+            <input type="text">
+          </div>
+          <div>
+            <div>H<sub>max</sub></div>
+            <input type="text">
+          </div>
+          <div>
+            <div>R<sub>min</sub></div>
+            <input type="text">
+          </div>
+          <div>
+            <div>R<sub>max</sub></div>
+            <input type="text">
+          </div>
+          <div>
+            <div>SL</div>
+            <input type="text">
+          </div>
+          <div>
+            <div>NL</div>
+            <input type="text">
+          </div>
+          <div>
+            <div>DI</div>
+            <input type="text">
+          </div>
+          <div>
+            <div>DT</div>
+            <input type="text">
+          </div>
+          <div>
+            <div>σ</div>
+            <input type="text">
+          </div>
+          <div>
+            <div>N</div>
+            <input type="text">
+          </div>
+          <div>
+            <div>M</div>
+            <input type="text">
+          </div>
+          <div>
+            <div>K</div>
+            <input type="text">
+          </div>
+          <div class="calcYinbi">
+            <div id="fangzhengjisuan">计算隐蔽指数</div>
+          </div>
+          <div>
+            <div>SL</div>
+            <input type="text">
+          </div>
+          <div>
+            <div>NL<sub>f</sub></div>
+            <input type="text">
+          </div>
+          <div>
+            <div>AG</div>
+            <input type="text">
+          </div>
+          <div>
+            <div>DT</div>
+            <input type="text">
+          </div>
+          <div class="calcYinbi">
+            <div id="fomjisuan">计算FOM</div>
+          </div>
+        </div>
+      </div>
+      <div class="left " style="width: 50%">
+        <div class="div_any_child div_height testOne fangzhen_right"
+             style="border-radius: 0 10px 10px 0">
+          <p>状态信息</p>
+        </div>
+      </div>
+    </div>
+    <!--            水声传播-->
+    <div id="first" style="display: none">
+      <div class="left" style="width: 72%">
+        <div class="div_any_child div_height testOne setColor chuanbo" style="border-radius: 10px 0 0 10px">
+          <div>
+            <p>参数设置</p>
+          </div>
+          <div class="chuanbo_left">
+            <div style="margin-top: 36px" class="chuanbo_left1">
+              <span>声源参数</span>
+              <div style="margin-left: 65px;margin-top:18px">
+                <div style="float: left">频率</div>
+                <input style="float: left" value="150" id="FRQ_Info" type="text">
+              </div>
+              <div style="margin-left: 36px;margin-top:18px">
+                <div style="float: left">深度</div>
+                <input style="float: left" value="500" id="depth_Info" type="text">
+              </div>
+              <div style="margin-left: 65px;margin-top: 10px">
+                <div style="float: left">纬度</div>
+                <input style="float: left" value="5" id="CENTER_LAT_Info" type="text">
+              </div>
+              <div style="margin-left: 36px;margin-top: 10px">
+                <div style="float: left">经度</div>
+                <input style="float: left" value="90" id="CENTER_LON_Info" type="text">
+              </div>
+            </div>
+            <div class="chuanbo_left2">
+              <span>环境参数</span>
+              <div style="margin-left:50px">
+                <div style="float: left">温度场</div>
+                <input style="float: left;width: 70px;margin-left: 10px" id="ttFilePath_Info" type="file">
+              </div>
+              <div>
+                <div style="float: left">盐度场</div>
+                <input style="float: left;width: 70px;margin-left: 10px" id="ssFilePath_Info" type="file">
+              </div>
+              <div>
+                <div style="float: left">地形</div>
+                <input style="float: left;width: 70px;margin-left: 10px" id="terrainFilePath_Info" type="file">
+              </div>
+            </div>
+            <div class="chuanbo_left3">
+              <span>模型参数</span>
+              <div class="chuanbo_left3_one">
+                <div style="float: left">声场维度</div>
+                <select name="" id="soundFieldDemension_Info">
+                  <option value="0">二维平面</option>
+                  <option value="1">扇形空间</option>
+                  <option value="2" selected>三维空间</option>
+                </select>
+              </div>
+              <div class="chuanbo_left3_two">
+                <div style="float: left">声场类型</div>
+                <select name="" id="ISF_Info">
+                  <option value="0">高斯声场</option>
+                  <option value="1">用户自定义声场</option>
+                  <option value="2">格林声场</option>
+                </select>
+              </div>
+              <div>
+                <div style="float: left;margin-left: 50px;margin-top: 16px">基准声速</div>
+                <input style="float: left;margin-left: 10px;margin-top:16px;color:#FFFFFF;background-color: transparent;border: 1px solid #94969D;width: 130px"
+                       value="0" id="C0_Info" type="text">
+              </div>
+              <div class="chuanbo_left3_three">
+                <div style="float: left">初始场距声源的水平距离</div>
+                <input style="float: left" value="0" id="RA_Info" type="text">
+              </div>
+              <div class="chuanbo_left3_three">
+                <div style="float: left">初始场处的声场深度 (m)</div>
+                <input style="float: left" value="6000" id="ZA_Info" type="text">
+              </div>
+              <div class="chuanbo_left3_four">
+                <div style="float: left">垂直方向上的点数</div>
+                <input style="float: left" type="text" id="N_Info" value="120">
+              </div>
+              <div class="chuanbo_left3_five">
+                <div style="float: left;margin-left: 8px">IHNK</div>
+                <input style="float: left" type="text" id="IHNK_Info" value="0">
+              </div>
+              <div class="chuanbo_left3_six">
+                <div style="float: left">海平面类型</div>
+                <select name="" id="ITYPES_Info">
+                  <option value="0">绝对软表面</option>
+                  <option value="1">用户自定义表面</option>
+                  <option value="2">SPARE</option>
+                </select>
+              </div>
+              <div class="chuanbo_left3_seven">
+                <div style="float: left">海地面类型</div>
+                <select name="" id="ITYPEB_Info">
+                  <option value="0">绝对软海底</option>
+                  <option value="1">用户自定义海底</option>
+                  <option value="2">SPARE</option>
+                  <option value="3" selected>平整海底</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="chuanbo_right">
+            <div style=" " class="chuanbo_right_num">
+              <div class="chuanbo_right_one">
+                <div style="float: left">FLDW</div>
+                <input style="float: left" value="360" id="FLDW_Info" type="text">
+              </div>
+              <div class="chuanbo_right_one">
+                <div style="float: left">NSEC</div>
+                <input style="float: left" value="360" id="NESC_Info" type="text">
+              </div>
+              <div class="chuanbo_right_two">
+                <div style="float: left">ITYPPW</div>
+                <select style="float: left" name="" id="ITYPPW_Info">
+                  <option value="0">FIELD ALONG PORT SIDEWALL IS SET TO 0.0</option>
+                  <option value="1">USER SUPPLIED. SEE SUBROUTINE UPORT3D.</option>
+                  <option value="2" selected>MODEL GENERATES 2D SOLUTION IF NDIM = 3.</option>
+                </select>
+              </div>
+              <div class="chuanbo_right_two" style="margin-top: 18px">
+                <div style="float: left">ITYPSW</div>
+                <select style="float: left" name="" id="ITYPSW_Info">
+                  <option value="0">FIELD ALONG STARBOARD SIDEWALL IS SET TO 0.0</option>
+                  <option value="1">USER SUPPLIED. SEE SUBROUTINE UPORT3D.</option>
+                  <option value="2" selected>MODEL GENERATES 2D SOLUTION IF NDIM = 3.</option>
+                </select>
+              </div>
+              <div class="chuanbo_right_two">
+                <div style="float: left">最大水平距离 (m)</div>
+                <input style="color:#FFFFFF;float: left;margin-left: 12px;width: 326px;background-color: transparent;border: 1px solid #94969D"
+                       id="RMAX_Info" value="10000" type="text">
+              </div>
+              <div class="chuanbo_right_three">
+                <div style="margin-left: 34px">
+                  <div style="float: left">DR</div>
+                  <input style="float: left;margin-left: 23px" id="DR_Info" value="5" type="text">
+                </div>
+                <div style="margin-left: 35px">
+                  <div style="float: left">WDR</div>
+                  <input style="float: left;margin-left: 10px" id="WDR_Info" value="100" type="text">
+                </div>
+                <div style="margin-left: 20px">
+                  <div style="float: left">WZ1</div>
+                  <input style="float: left;margin-left: 14px" id="WZ1_Info" value="20" type="text">
+                </div>
+                <div style="margin-left: 34px">
+                  <div style="float: left">WZ2</div>
+                  <input style="float: left;margin-left: 10px" id="WZ2_Info" value="5500" type="text">
+                </div>
+                <div style="margin-left: 35px">
+                  <div style="float: left">WDZ</div>
+                  <input style="float: left;margin-left: 10px" id="WDZ_Info" value="20" type="text">
+                </div>
+                <div style="margin-left:20px ">
+                  <div style="float: left">WDTH</div>
+                  <input style="float: left" id="WDTH_Info" value="1" type="text">
+                </div>
+                <div style="margin-left: 34px">
+                  <div style="float: left">PDR</div>
+                  <input style="float: left;margin-left: 12px" id="PDR_Info" value="2000" type="text">
+                </div>
+                <div style="margin-left: 35px">
+                  <div style="float: left">PDZ</div>
+                  <input style="float: left;margin-left: 16px" id="PDZ_Info" value="500" type="text">
+                </div>
+                <div style="margin-left: 20px">
+                  <div style="float: left">PDTH</div>
+                  <input style="float: left;margin-left: 8px" id="PDTH_Info" value="20" type="text">
+                </div>
+              </div>
+            </div>
+            <div class="chuanbo_right_ber">
+              <span>输出参数</span>
+              <div style="width: 467px;margin-left: 34px;margin-top: 18px">
+                <div style="float: left;">输出.in文件名</div>
+                <input id="projectName_Info" style="float: left;margin-left: 18px;color: #FFFFFF" type="text" value="FOR3D">
+              </div>
+              <div class="chuanbo_right_ber1">
+                <div style="float: left;">初始场</div>
+                <select id="ISFLD_Info" style="float: left;margin-top: 2px" name="">
+                  <option value="0">否</option>
+                  <option value="1">是</option>
+                </select>
+              </div>
+              <div class="chuanbo_right_ber1">
+                <div style="float: left;">声速剖面</div>
+                <select id="ISVP_Info" style="float: left;margin-top: 2px" name="">
+                  <option value="0">否</option>
+                  <option value="1">是</option>
+                </select>
+              </div>
+              <div class="chuanbo_right_ber1">
+                <div style="float: left;margin-left: 10px">海底地形</div>
+                <select id="IBOT_Info" style="float: left;margin-top: 2px" name="">
+                  <option value="0">否</option>
+                  <option value="1">是</option>
+                </select>
+              </div>
+              <div style="float: left" class="chuanbo_right_ber2" id="runFor3DBtn">运行</div>
+              <div style="float: left" class="chuanbo_right_ber2" id="creatINFileBtn">生成文件</div>
+              <div style="float: left;display: none" class="chuanbo_right_ber2" id="exprotFileBtn">输出文件</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="left setColor" style="width: 28%">
+        <div class="div_any_child div_height testOne " style="border-radius: 0 10px 10px 0">
+          <p style="border-radius: 0 10px 0 0">状态信息</p>
+          <div id="soundRunningInfo"></div>
+        </div>
+      </div>
+    </div>
+    <!--            用户管理-->
+    <div id="userControl" style="display: none">
+      <iframe id="user" style="width: 100%;height: 765px" src="user.html"></iframe>
+    </div>
+    <!--        数据库管理-->
+    <div id="database" style="display: none">
+      <iframe id="data" style="width: 100%;height: 765px" src="file.html"></iframe>
+    </div>
+  </div>
+
+
+</div>
+<div id="maskContainer" style="display:none;position:absolute; background-color: rgba(0,0,0,0.5);top: 0;left:0;right:0;bottom:0;width: 100vw;height:100vh;z-index: 999999999">
+  <div style="line-height: 100vh;text-align: center; color:white;font-size: 50px;">正在读取数据，请稍等...</div>
+</div>
+
+<style>
+  #cesiumContainer {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+</style>
+
+<script src="js/newData.js"></script>
+<script type="text/javascript" src="lib/jquery/jquery-editable-select.min.js"></script>
+<script type="text/javascript" src="lib/layui/layui.all.js"></script>
+<script type="text/javascript" src="lib/layui/lay/modules/laydate.js"></script>
+<script type="text/javascript" src="lib/d3/d3.v5.min.js"></script>
+<script type="text/javascript" src="lib/d3/d3-contour.1.2.0.js"></script>
+<script type="text/javascript" src="lib/d3/d3-scale-chromatic.v1.min.js"></script>
+<script type="text/javascript" src="js/handleCesium/cesiumDisplay.js"></script>
+<script type="text/javascript" src="js/handleCesium/d3Contours.js"></script>
+<script type="text/javascript" src="js/handleCesium/ARGO_Display.js"></script>
+<script type="text/javascript" src="js/handleCesium/routeDisplay.js"></script>
+<script type="text/javascript" src="js/handleCesium/addEchart.js"></script>
+<script type="text/javascript" src="js/handleCesium/Windy.js"></script>
+<script type="text/javascript" src="js/handleCesium/Flow.js"></script>
+<script type="text/javascript" src="js/handleCesium/evaluate.js"></script>
+<script type="text/javascript" src="js/handleCesium/cesiumPoint.js"></script>
+<script type="text/javascript" src="js/for3D.js"></script>
+
+<script type="text/javascript" src="js/leftNav.js"></script>
+<script type="text/javascript" src="js/onCesium.js"></script>
+<script type="text/javascript" src="js/dataAnalysis.js"></script>
+<script type="text/javascript" src="js/fakeWave.js"></script>
+</body>
+</html>

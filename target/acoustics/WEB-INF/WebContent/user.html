@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User</title>
+  <script src="lib/js/toast.js"></script>
+  <script src="lib/jquery/jquery-3.5.1.min.js"></script>
+  <script src="lib/js/checkLogin.js"></script>
+  <link rel="stylesheet" href="user.css">
+  <style>
+  </style>
+</head>
+<body>
+<section id="checkingLogin" class="mask">正在校验登陆状态</section>
+<section class="container">
+  <section class="sec-user-info">
+    <div>
+      <ul class="ul-user-info">
+        <li>
+          <label>
+            <span class="txt-title">User Name</span>
+            <input id="username" type="text">
+          </label>
+        </li>
+        <li>
+          <label>
+            <span class="txt-title">Password</span>
+            <input id="password" type="password">
+          </label>
+        </li>
+      </ul>
+    </div>
+    <div class="div-button-container">
+      <ul>
+        <li id="addUser" class="button">Add</li>
+        <li id="deleteUser" class="button">Delete</li>
+      </ul>
+    </div>
+  </section>
+  <section class="sec-user-list">
+    <div style="font-size: x-large; padding: 10px; line-height: 30px;color: #FFFFFF">Existing Users List</div>
+    <div class="table-container">
+      <table>
+        <thead>
+        <tr>
+          <th>User Name</th>
+        </tr>
+        </thead>
+        <tbody id="tbodyUserList"></tbody>
+      </table>
+    </div>
+  </section>
+</section>
+<script src="user.js"></script>
+</body>
+</html>

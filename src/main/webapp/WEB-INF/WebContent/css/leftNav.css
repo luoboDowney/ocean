@@ -1,0 +1,127 @@
+.leftNav > .left-nav-part {
+  position: relative;
+  font-size: small;
+}
+
+.leftNav > .left-nav-part .left-nav-button {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  float: right;
+  width: 45px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  border-radius: 3px;
+  cursor: pointer;
+  background: linear-gradient(to bottom, #ffffff, #66ccff);
+  color: black;
+}
+
+.leftNav > .left-nav-part > .content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  height: 100%;
+  width: 100%;
+  padding: 30px 15px;
+  box-sizing: border-box;
+}
+
+.leftNav > .left-nav-part > .content label {
+  width: 100%;
+  display: inline-block;
+  margin: 15px 0;
+  padding-right: 5px;
+  box-sizing: border-box;
+}
+
+.leftNav > .left-nav-part > .content p {
+  float: left;
+  width: 80px;
+}
+
+.leftNav > .left-nav-part > .content select {
+  float: unset;
+  width: calc(100% - 80px);
+}
+
+.leftNav > .left-nav-part > .content ul {
+  width: 100%;
+  height: 100%;
+  overflow: hidden auto;
+}
+
+.leftNav > .left-nav-part > .content ul::-webkit-scrollbar {
+  display: none;
+}
+
+.leftNav > .left-nav-part > .content li {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 10px;
+  list-style: none;
+  float: left;
+}
+
+.leftNav > .left-nav-part > .content li * {
+  vertical-align: middle;
+  float: unset;
+}
+
+.leftNav > .left-nav-part > .content li label {
+  display: inline-block;
+  margin: 0;
+}
+
+.leftNav > .left-nav-part > .content li span {
+  display: inline-block;
+  width: calc(100% - 20px);
+  height: 23px;
+  line-height: 23px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leftNav > .left-nav-part > .content label.label-param-top {
+  width: 49%;
+}
+
+.leftNav > .left-nav-part > .content label.label-param-bottom {
+  width: 32%;
+}
+
+.leftNav > .left-nav-part > .content label.label-param-top p,
+.leftNav > .left-nav-part > .content label.label-param-bottom p {
+  width: 40px;
+}
+
+.leftNav > .left-nav-part > .content label.label-param-top select,
+.leftNav > .left-nav-part > .content label.label-param-bottom select,
+.leftNav > .left-nav-part > .content label.label-param-bottom input  {
+  width: calc(100% - 40px);
+}
+
+.leftNav > .left-nav-part > .content label.label-param-bottom input {
+  padding-left: 2px;
+  padding-right: 12px !important;
+  background-color: #FFFFFF;
+  border-width: 1px;
+  line-height: 16px;
+  box-sizing: border-box;
+  background-position-x: calc(100% + 5px);
+}
+
+.leftNav > .left-nav-part > .content label.label-param-bottom ul {
+  margin-top: 2px;
+}
+
+.leftNav > .left-nav-part > .content label.label-param-bottom li {
+  width: 100%;
+  padding: 0;
+  color: #000000;
+}

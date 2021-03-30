@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link rel="stylesheet" href="lib/layui/css/layui.css">
+  <style>
+    /*定义弹出框字体颜色*/
+    .layui-layer-msg * {
+      color: #fdfcfc !important;
+    }
+  </style>
+  <script src="lib/js/toast.js"></script>
+  <script src="lib/jquery/jquery-3.5.1.min.js"></script>
+  <script src="lib/js/checkLogin.js"></script>
+  <link rel="stylesheet" href="css/data.css">
+</head>
+<body>
+<section class="secParam">
+  <ul class="param-container">
+    <li>
+      <span>lat(纬度)</span>
+      <label style="width: 16%;margin-right: 4px"><input id="inputLat0" type="text" onchange="setLat0(this.value)"></label>
+      <label style="width: 16%;margin-right: 4px"><input id="inputLat1" type="text" onchange="setLat1(this.value)"></label>
+      <label style="width: 16%"><input id="inputLat2" type="text" onchange="setLat2(this.value)"></label>
+    </li>
+    <li>
+      <span>lon(经度)</span>
+      <label style="width: 16%;margin-right: 4px"><input id="inputLon0" type="text" onchange="setLon0(this.value)"></label>
+      <label style="width: 16%;margin-right: 4px"><input id="inputLon1" type="text" onchange="setLon1(this.value)"></label>
+      <label style="width: 16%"><input id="inputLon2" type="text" onchange="setLon2(this.value)"></label>
+    </li>
+    <li>
+      <span>date(日期)</span>
+      <label><input id="inputDate" type="text" onchange="setDate(this.value)"></label>
+    </li>
+    <li>
+      <span>time(时次)</span>
+      <label><input id="inputTime" type="text" onchange="setTime(this.value)"></label>
+    </li>
+    <li>
+      <span>domain(研究区域)</span>
+      <label><input id="inputDomain" type="text" onchange="setDomain(this.value)"></label>
+    </li>
+    <li>
+      <span>level(垂直层次)</span>
+      <label><input id="inputLevel" type="text" onchange="setLevel(this.value)"></label>
+    </li>
+    <li>
+      <span>model(模型类型)</span>
+      <label><input id="inputModel" type="text" onchange="setModel(this.value)"></label>
+    </li>
+    <li>
+      <span>element(产品要素)</span>
+      <label><input id="inputElement" type="text" onchange="setElement(this.value)"></label>
+    </li>
+    <li>
+      <span>value</span>
+      <label><input id="inputValue" type="text" onchange="setValue(this.value)"></label>
+    </li>
+  </ul>
+  <ul class="button-container">
+    <li id="btnSearch">查询</li>
+    <li id="btnAdd">添加</li>
+    <li id="btnDelete">删除</li>
+    <li id="btnUpdate">更新</li>
+    <li id="btnUpload">上传</li>
+    <li id="btnSaveData">下载</li>
+  </ul>
+</section>
+
+<section class="secTable">
+  <div class="tableContainer">
+    <table>
+      <thead>
+      <tr>
+        <th>lat(纬度)</th>
+        <th>lon(经度)</th>
+        <th>date(日期)</th>
+        <th>time(时次)</th>
+        <th>domain(研究区域)</th>
+        <th>level(垂直层次)</th>
+        <th>model(模型类型)</th>
+        <th>element(产品要素)</th>
+        <th>value</th>
+      </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</section>
+<script type="text/javascript" src="lib/layui/layui.all.js"></script>
+<script type="text/javascript" src="js/UploadDataToMongoDB/uploadDemo.js"></script>
+<script>
+  // document.getElementById("btnUpload").addEventListener("click", function () {
+  //   document.getElementById("test").click();
+  // });
+
+  let domTbody = document.getElementById("tbody");
+  let resultData;
+
+  /**
+   * 添加一条信息到表格中
+   *
+   * @param {string[]} dataList
+   */
+  // function appendDataToTable(dataList) {
+  //   let tr = document.createElement("tr");
+  //   dataList.forEach(data => {
+  //     let td = document.createElement("td");
+  //     td.textContent = data;
+  //     tr.append(td);
+  //   });
+  //   domTbody.append(tr);
+  // }
+
+  function appendDataToTable(dataList) {
+    domTbody.innerHTML = "";
+    let temp = [];
+    dataList.forEach(data => {
+      temp = [];
+      let tr = document.createElement("tr");
+      for (const dataKey in data) {
+        if (data.hasOwnProperty(dataKey)) {
+          temp.push(data[dataKey]);
+        }
+      }
+      [temp[0], temp[6]] = [temp[6], temp[0]];
+      [temp[1], temp[7]] = [temp[7], temp[1]];
+      [temp[2], temp[6]] = [temp[6], temp[2]];
+      [temp[3], temp[7]] = [temp[7], temp[3]];
+      [temp[4], temp[6]] = [temp[6], temp[4]];
+      [temp[5], temp[7]] = [temp[7], temp[5]];
+      temp.forEach(item => {
+        let td = document.createElement("td");
+        td.textContent = item;
+        tr.append(td);
+      });
+      domTbody.append(tr);
+    });
+  }
+
+  let domInputLat0 = document.getElementById("inputLat0"),
+          domInputLat1 = document.getElementById("inputLat1"),
+          domInputLat2 = document.getElementById("inputLat2"),
+          domInputLon0 = document.getElementById("inputLon0"),
+          domInputLon1 = document.getElementById("inputLon1"),
+          domInputLon2 = document.getElementById("inputLon2"),
+          domInputDate = document.getElementById("inputDate"),
+          domInputTime = document.getElementById("inputTime"),
+          domInputDomain = document.getElementById("inputDomain"),
+          domInputLevel = document.getElementById("inputLevel"),
+          domInputModel = document.getElementById("inputModel"),
+          domInputElement = document.getElementById("inputElement"),
+          domInputValue = document.getElementById("inputValue");
+
+  /**
+   * 获取参数
+   *
+   * @returns {{date, level, domain, lon, model, time, value, lat, element}}
+   */
+  function getParamSearch() {
+    return {
+      // startlat: domInputLat0.value,
+      // startlon: domInputLon0.value,
+      startlat: domInputLat1.value,
+      endlat: domInputLat2.value,
+      startlon: domInputLon1.value,
+      endlon: domInputLon2.value,
+      date: domInputDate.value,
+      time: domInputTime.value,
+      domain: domInputDomain.value,
+      level: domInputLevel.value,
+      model: domInputModel.value,
+      element: domInputElement.value,
+      values: domInputValue.value
+    };
+  }
+
+  function getParam() {
+    return {
+      // startlat: domInputLat1.value,
+      // endlat: domInputLat2.value,
+      // startlon: domInputLon1.value,
+      // endlon: domInputLon2.value,
+      lat: domInputLat0.value,
+      lon: domInputLon0.value,
+      date: domInputDate.value,
+      time: domInputTime.value,
+      domain: domInputDomain.value,
+      level: domInputLevel.value,
+      model: domInputModel.value,
+      element: domInputElement.value,
+      values: domInputValue.value
+    };
+  }
+
+  function setLat0(value) {
+    domInputLat0.value = value;
+  }
+
+  function setLat1(value) {
+    domInputLat1.value = value;
+  }
+
+  function setLat2(value) {
+    domInputLat2.value = value;
+  }
+
+  function setLon0(value) {
+    domInputLon0.value = value;
+  }
+
+  function setLon1(value) {
+    domInputLon1.value = value;
+  }
+
+  function setLon2(value) {
+    domInputLon2.value = value;
+  }
+
+  function setDate(value) {
+    domInputDate.value = value;
+  }
+
+  function setTime(value) {
+    domInputTime.value = value;
+  }
+
+  function setDomain(value) {
+    domInputDomain.value = value;
+  }
+
+  function setLevel(value) {
+    domInputLevel.value = value;
+  }
+
+  function setModel(value) {
+    domInputModel.value = value;
+  }
+
+  function setElement(value) {
+    domInputElement.value = value;
+  }
+
+  function setValue(value) {
+    domInputValue.value = value;
+  }
+</script>
+<script>
+
+  function getUserList() {
+    $.ajax({
+      url: getContextPath() + "/data/getDataListAction",
+      type: "POST",
+      success(result) {
+        switch (result.code) {
+          case 200:
+            appendDataToTable(result.data);
+            break;
+          case 500:
+            toast("获取用户列表失败");
+            break;
+        }
+      },
+      error() {
+        toast("网络错误，获取用户列表失败。");
+      }
+    });
+  }
+
+  domTbody.addEventListener("click", function (e) {
+    if (e.target.tagName.toLowerCase() === "td") {
+      Array.from(this.children).forEach(tr => tr.classList.remove("active"));
+      let tr = e.target.parentNode;
+      tr.classList.add("active");
+      // TODO: tr is the node which is clicked
+      document.getElementById("inputLat0").value = tr.children[0].innerHTML;
+      document.getElementById("inputLon0").value = tr.children[1].innerHTML;
+      document.getElementById("inputDate").value = tr.children[2].innerHTML;
+      document.getElementById("inputTime").value = tr.children[3].innerHTML;
+      document.getElementById("inputDomain").value = tr.children[4].innerHTML;
+      document.getElementById("inputLevel").value = tr.children[5].innerHTML;
+      document.getElementById("inputModel").value = tr.children[6].innerHTML;
+      document.getElementById("inputElement").value = tr.children[7].innerHTML;
+      document.getElementById("inputValue").value = tr.children[8].innerHTML;
+    }
+  });
+
+  document.getElementById("btnSearch").addEventListener("click", () => {
+    $.ajax({
+      url: getContextPath() + "/data/findDataAction",
+      type: "POST",
+      contentType: "application/json;charset=UTF-8",
+      data: JSON.stringify(getParamSearch()),
+      success(result) {
+        switch (result.code) {
+          case 200:
+            appendDataToTable(result.data);
+            resultData = result.data;
+            break;
+          case 500:
+            toast("查询失败。");
+            break;
+        }
+      },
+      error() {
+        toast("网络错误，查询失败。");
+      }
+    });
+  });
+
+  //下载数据
+  document.getElementById("btnSaveData").addEventListener("click", saveData);
+
+  function saveData() {
+    if (resultData !== undefined) {
+      $.ajax({
+        url: getContextPath() + "/data/saveData",
+        type: "POST",
+        contentType: "application/json;charset=UTF-8",
+        data: JSON.stringify(resultData),
+        success(result) {
+          switch (result.code) {
+            case 200:
+              let url = getContextPath() + "/data/download";
+              window.open(url);
+              break;
+            case 500:
+              toast("保存数据失败！");
+              break;
+          }
+        },
+        error() {
+          toast("网络错误，保存数据失败！");
+        }
+      });
+
+    }
+  }
+
+  function getUrl(url, params) {
+    let idx = url.indexOf('?');
+    if (idx < 0) {
+      url = url + '?';
+    } else if (idx !== url.length - 1) {
+      if (url.charAt(url.length - 1) !== '&') {
+        url = url + '&';
+      }
+    }
+    for (let key in params) {
+      if (params.hasOwnProperty(key)) {
+        let v = params[key];
+        if (v !== '') {
+          url += key + '=' + params[key] + '&';
+        }
+      }
+    }
+    // for (let key in params) {
+    //   if (params.hasOwnProperty(key)) {
+    //     let v = params[key];
+    //     if (v !== '') {
+    //       url += key + '=' + params[key] + '&';
+    //     }
+    //   }
+    // }
+    return url;
+  }
+
+  document.getElementById("btnAdd").addEventListener("click", () => {
+    $.ajax({
+      url: getContextPath() + "/data/addDataAction",
+      type: "POST",
+      contentType: "application/json;charset=UTF-8",
+      data: JSON.stringify(getParam()),
+      success(result) {
+        switch (result.code) {
+          case 200:
+            appendDataToTable(result.data);
+            break;
+          case 500:
+            toast("新增数据失败。");
+            break;
+        }
+      },
+      error() {
+        toast("网络错误，新增数据失败。");
+      }
+    });
+  });
+  document.getElementById("btnDelete").addEventListener("click", () => {
+    $.ajax({
+      url: getContextPath() + "/data/deleteDataAction",
+      type: "POST",
+      contentType: "application/json;charset=UTF-8",
+      data: JSON.stringify(getParam()),
+      success(result) {
+        switch (result.code) {
+          case 200:
+            appendDataToTable(result.data);
+            flag = true;
+            break;
+          case 500:
+            toast("删除数据失败。");
+            break;
+        }
+      },
+      error() {
+        toast("网络错误，删除数据失败。");
+      }
+    });
+  });
+  document.getElementById("btnUpdate").addEventListener("click", () => {
+    $.ajax({
+      url: getContextPath() + "/data/uploadDataAction",
+      type: "POST",
+      contentType: "application/json;charset=UTF-8",
+      data: JSON.stringify(getParam()),
+      success(result) {
+        switch (result.code) {
+          case 200:
+            appendDataToTable(result.data);
+            break;
+          case 500:
+            toast("更新数据失败。");
+            break;
+        }
+      },
+      error() {
+        toast("网络错误，更新数据失败。");
+      }
+    });
+  });
+</script>
+</body>
+</html>

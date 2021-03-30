@@ -1,0 +1,97 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  color: #fdfcfc;
+}
+
+section {
+  float: left;
+  padding: 0 20px;
+}
+
+ul {
+  list-style: none;
+  margin: 20px 0;
+}
+
+ul li {
+  padding: 5px 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: center;
+}
+
+tr.active {
+  background-color: #fcfcfa;
+}
+
+th, td {
+  border: 1px solid #f8f8f8;
+}
+
+td:hover {
+  cursor: pointer;
+}
+
+.secParam {
+  width: 30%;
+}
+
+.secTable {
+  width: 70%;
+  height: 100vh;
+}
+
+.param-container li {
+  height: 45px;
+  line-height: 35px;
+}
+
+.param-container span,
+.param-container label {
+  float: left;
+  width: 50%;
+  text-align: left;
+  padding: 0 30px;
+}
+
+.param-container label {
+  border: 1px solid #fdfcfc;
+  padding: 4px 10px;
+}
+
+.param-container input {
+  float: left;;
+  width: 100%;
+  line-height: 25px;
+  outline: none;
+  border-style: none;
+  text-align: center;
+  font-size: large;
+}
+
+.button-container li {
+  float: left;
+  width: calc(25% - 20px);
+  height: 35px;
+  line-height: 25px;
+  padding: 5px 0;
+  margin: 15px 26px;
+  border: 1px solid #fdfcfc;
+  cursor: pointer;
+  text-align: center;
+}
+
+.tableContainer {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+}
+
+input {
+  background: transparent;
+}

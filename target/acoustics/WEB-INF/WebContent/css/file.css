@@ -1,0 +1,150 @@
+.laydate-set-ym > span,
+.laydate-footer-btns > span,
+.layui-input,
+.layui-laypage-btn,
+.layui-icon-down,
+span.layui-laypage-limits select,
+span.layui-laypage-limits option {
+  color: black;
+}
+
+.layui-table-tips-c:before {
+  right: 1px;
+  top: -4px;
+}
+
+.layui-table-body {
+  max-height: 85vh;
+  overflow: auto;
+}
+
+.layui-table-body::-webkit-scrollbar {
+  display: none;
+}
+
+table.layui-table {
+  background-color: transparent;
+}
+
+.layui-table-fixed .layui-icon-down {
+  display: none;
+}
+
+.layui-table-fixed table.layui-table,
+.layui-table-hover,
+table.layui-table tbody tr:hover,
+table.layui-table thead tr,
+.layui-laypage .layui-laypage-curr .layui-laypage-em {
+  background-color: #2B55a8;
+}
+
+.layui-laypage a:hover {
+  color: #2B55a8;
+}
+
+.layui-laypage a,
+.layui-laypage span {
+  color: #ccc;
+}
+
+/* cover css */
+.param-container label span {
+  padding: 0;
+  width: 30px;
+  line-height: 25px;
+}
+
+.param-container input[type="checkbox"],
+.param-container input[type="radio"] {
+  width: unset;
+  height: 25px;
+  margin-right: 5px;
+}
+
+/* input[type="number"] */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* common css */
+.no-bl {
+  border-left-width: 0 !important;
+}
+
+.no-br {
+  border-right-width: 0 !important;
+}
+
+.no-bt {
+  border-top-width: 0 !important;
+}
+
+/* custom css */
+.secParam {
+  width: 25%;
+  min-width: 420px;
+}
+
+.secTable {
+  width: 75%;
+  max-width: calc(100% - 420px);
+}
+
+.div-date {
+  width: 61%;
+  float: left;
+  height: 100%;
+  border: 1px solid;
+  cursor: pointer;
+  text-align: center;
+}
+
+
+.param-container li {
+  margin: 5px 0;
+}
+
+.param-container span {
+  width: 35%;
+}
+
+.li-lat-lon label {
+  width: 30%;
+}
+
+.li-lat-lon label span {
+  padding: 0;
+  width: 30px;
+  line-height: 25px;
+}
+
+.li-lat-lon label input {
+  width: calc(100% - 30px);
+  text-align: left;
+}
+
+.li-product-element {
+  height: 80px;
+}
+
+.li-product-element > span {
+  height: 70px;
+  line-height: 70px;
+}
+
+.li-product-element label span {
+  width: unset;
+}
+
+.button-container {
+  margin-top: 100px;
+}
+
+.button-container li {
+  width: 130px;
+}

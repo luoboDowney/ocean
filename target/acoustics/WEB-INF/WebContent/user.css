@@ -1,0 +1,106 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+body {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.mask {
+  position: absolute;
+  z-index: 9;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  padding-top: calc(50vh - 50pt);
+  background: rgba(14, 11, 65, 0.8);
+  font-size: 50pt;
+}
+
+.container {
+  width: 1200px;
+  height: 100%;
+  margin: auto;
+  padding: 50px 0;
+}
+
+.sec-user-info {
+  margin-top: 50px;
+  float: left;
+  width: 500px;
+}
+
+.div-button-container {
+  margin-top: 50px;
+}
+
+.sec-user-list {
+  float: right;
+  width: 700px;
+  height: 100%;
+}
+
+ul {
+  list-style: none;
+}
+
+.button {
+  background-color: #4E4BF1;
+  color: white;
+  width: 100px;
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 0 24px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.ul-user-info li {
+  margin: 5px 0;
+}
+
+.txt-title {
+  color: #FFFFFF;
+  display: inline-block;
+  width: 100px;
+}
+
+input {
+  padding: 5px;
+}
+
+.table-container {
+  color: #FFFFFF;
+  height: calc(100% - 50px);
+  overflow-y: auto;
+  border: 1px solid black;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: #4e4bf1;
+  color: white;
+}
+
+tr {
+  height: 30px;
+}
+
+td {
+  text-align: center;
+  border-top: 1px solid blue;
+  border-bottom: 1px solid blue;
+  cursor: pointer;
+}
